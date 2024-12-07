@@ -4,8 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${default}",
-                "${workspaceFolder}/engine/3rdparty/**",
-                "${workspaceFolder}/engine/3rdparty/stb"
+                "${workspaceFolder}/engine/3rdparty/**"//,
+                // "${workspaceFolder}/engine/3rdparty/stb"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
