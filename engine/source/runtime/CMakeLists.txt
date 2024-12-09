@@ -13,8 +13,8 @@ file(GLOB_RECURSE SOURCE_FILES "*.cpp")
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${HEADER_FILES} ${SOURCE_FILES})
 
-# add_library(${TARGET_NAME} ${HEADER_FILES} ${SOURCE_FILES})
-add_executable(${TARGET_NAME} ${HEADER_FILES} ${SOURCE_FILES})
+add_library(${TARGET_NAME} ${HEADER_FILES} ${SOURCE_FILES})
+# add_executable(${TARGET_NAME} ${HEADER_FILES} ${SOURCE_FILES})
 
 set_target_properties(${TARGET_NAME} PROPERTIES CXX_STANDARD 17)
 set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "Engine")
@@ -32,3 +32,6 @@ target_link_libraries(${TARGET_NAME} PRIVATE $<BUILD_INTERFACE:json11>)
 target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${vulkan_include}>)
 target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${THIRD_PARTY_DIR}/vulkanmemoryallocator/include>)
 target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${json_include}>)
+
+target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${ENGINE_ROOT_DIR}/source>)
+target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${ENGINE_ROOT_DIR}/source/runtime>)

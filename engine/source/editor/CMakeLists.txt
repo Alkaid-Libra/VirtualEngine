@@ -6,22 +6,23 @@ file(GLOB EDITOR_RESOURCE CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/resource
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${EDITOR_HEADERS} ${EDITOR_SOURCES} ${EDITOR_RESOURCE})
 
-# add_executable(${TARGET_NAME} ${EDITOR_HEADERS} ${EDITOR_SOURCES} ${EDITOR_RESOURCE})
+add_executable(${TARGET_NAME} ${EDITOR_HEADERS} ${EDITOR_SOURCES} ${EDITOR_RESOURCE})
 
-add_compile_definitions("VIRTUALENGINE_ROOT_DIR=${BINARY_ROOT_DIR}")
+add_compile_definitions("VIRTUAL_ROOT_DIR=${BINARY_ROOT_DIR}")
 
-# set_target_properties(${TARGET_NAME} PROPERTIES CXX_STANDARD 17 OUTPUT_NAME "VirtualEditor")
-# set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "Engine")
+set_target_properties(${TARGET_NAME} PROPERTIES CXX_STANDARD 17 OUTPUT_NAME "VirtualEditor")
+set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "Engine")
 
 # target_compile_options(${TARGET_NAME} PUBLIC "$<COMPILE_LANE_AND_ID:CXX,MSVC>:/WX->")
 
-# target_link_libraries(${TARGET_NAME} VirtualRuntime)
+target_link_libraries(${TARGET_NAME} VirtualRuntime)
 
-# add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-#     COMMAND ${CMAKE_COMMAND} -E make_directory "${BINARY_ROOT_DIR}"
+add_custom_command(
+    TARGET ${TARGET_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${BINARY_ROOT_DIR}"
 #     COMMAND ${CMAKE_COMMAND} -E copy "${ENGINE_ROOT_DIR}/${TARGET_NAME}.ini" "${BINARY_ROOT_DIR}"
 #     COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/resource" "${BINARY_ROOT_DIR}/resource"
 #     COMMAND ${CMAKE_COMMAND} -E copy_directory "$<TARGET_FILE_DIR:${TARGET_NAME}>/" "${BINARY_ROOT_DIR}"
 #     COMMAND ${CMAKE_COMMAND} -E remove_directory "${BINARY_ROOT_DIR}/${ENGINE_ASSET_DIR}"
 #     COMMAND ${CMAKE_COMMAND} -E copy_directory "${ENGINE_ROOT_DIR}/${ENGINE_ASSET_DIR}" "${BINARY_ROOT_DIR}/${ENGINE_ASSET_DIR}"
-# )
+)
