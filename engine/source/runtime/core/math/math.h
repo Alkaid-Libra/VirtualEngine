@@ -65,7 +65,7 @@ namespace VE
 
         Radian operator-() const { return Radian(-m_rad); }
         Radian operator-(const Radian& r) const { return Radian(m_rad - r.m_rad); }
-        Radian& operator-(const Degree& d) const;
+        Radian operator-(const Degree& d) const;
         Radian& operator-=(const Radian& r)
         {
             m_rad -= r.m_rad;
@@ -226,19 +226,81 @@ namespace VE
         static Radian asin(float value);
         static Radian atan(float value) { return Radian(std::atan(value)); }
         static Radian atan2(float y_v, float x_v) { return Radian(std::atan2(y_v, x_v)); }
+
+        template<class T>
+        static constexpr T max(const T A, const T B)
+        {
+            return std::max(A, B);
+        }
+
+        template<class T>
+        static constexpr T min(const T A, const T B)
+        {
+            return std::min(A, B);
+        }
+
+        template<class T>
+        static constexpr T max3(const T A, const T B, const T C)
+        {
+            return std::max({A, B, C});
+        }
+
+        template<class T>
+        static constexpr T min3(const T A, const T B, const T C)
+        {
+            return std::min({A, B, C});
+        }
+
+        static Matrix4x4
+        makeViewMatrix(const Vector3& position, const Quaternion& orientation, const Matrix4x4* reflect_matrix = nullptr);
+        
+        static Matrix4x4
+        makeLookMatrix(const Vector3& eye_position, const Vector3& target_position, const Vector3& up_dir);
+        
+        static Matrix4x4 makePerspectiveMatrix(Radian fovy, float aspect, float znear, float zfar);
+
+        static Matrix4x4
+        makeOrthographicProjectionMatrix(float left, float right, float bottom, float top, float znear, float zfar);
     };
 
     // ==========================================
     // Radian required class Degree to be defined
     inline Radian::Radian(const Degree& d) : m_rad(d.valueRadians()) {}
-    inline float Radian::valueDegrees() const { return Math::radiansToDegrees(m_rad); }
     inline Radian& Radian::operator=(const Degree& d)
     {
         m_rad = d.valueRadians();
         return *this;
     }
+    inline Radian Radian::operator+(const Degree& d) const { return Radian(m_rad + d.valueRadians()); }
+    inline Radian& Radian::operator+=(const Degree& d)
+    {
+        m_rad += d.valueRadians();
+        return *this;
+    }
+    inline Radian Radian::operator-(const Degree& d) const { return Radian(m_rad - d.valueRadians()); }
+    inline Radian& Radian::operator-=(const Degree& d)
+    {
+        m_rad -= d.valueRadians();
+        return *this;
+    }
+
+    inline float Radian::valueDegrees() const { return Math::radiansToDegrees(m_rad); }
 
     inline float Radian::valueAngleUnits() const { return Math::radiansToAngleUnits(m_rad); }
 
+    inline float Degree::valueRadians() const { return Math::degreesToRadians(m_deg); }
 
+    inline float Degree::valueAngleUnits() const { return Math::degreesToAngleUnits(m_deg); }
+
+    inline Angle::operator Radian() const { return Radian(Math::angleUnitsToRadians(m_angle)); }
+
+    inline Angle::operator Degree() const { return Degree(Math::angleUnitsToDegrees(m_angle)); }
+
+    inline Radian operator*(float a, const Radian& b) { return Radian(a * b.valueRadians()); }
+
+    inline Radian operator/(float a, const Radian& b) { return Radian(a / b.valueRadians()); }
+
+    inline Degree operator*(float a, const Degree& b) { return Degree(a * b.valueDegrees()); }
+
+    inline Degree operator/(float a, const Degree& b) { return Degree(a / b.valueDegrees()); }
 } // namespace VE

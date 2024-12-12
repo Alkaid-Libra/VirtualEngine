@@ -118,6 +118,16 @@
         "vec4ub": "cpp",
         "vec4us": "cpp",
         "vertexarraystate": "cpp",
-        "cfloat": "cpp"
+        "cfloat": "cpp",
+        "matrixd": "cpp",
+        "matrixf": "cpp",
+        "plane": "cpp",
+        "vec2i": "cpp",
+        "vec2ui": "cpp",
+        "vec3i": "cpp",
+        "vec3ui": "cpp",
+        "vec4i": "cpp",
+        "vec4ui": "cpp",
+        "cassert": "cpp"
     }
 }
