@@ -221,7 +221,7 @@ namespace VE
             ReflectionPtr() : m_type_name(), m_instance(nullptr) {}
 
             // copy constructor
-            ReflectionPtr(const ReflectionPtr& dest) : m_type_name(dest.m_type_name), m_instance(dest.instance) {}
+            ReflectionPtr(const ReflectionPtr& dest) : m_type_name(dest.m_type_name), m_instance(dest.m_instance) {}
             
             template<typename U /*, typename = typename std::enable_if<std::is_safely_castable<T*, U*>::value>::type*/>
             ReflectionPtr<T>& operator=(const ReflectionPtr<U>& dest)

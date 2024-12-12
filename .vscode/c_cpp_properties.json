@@ -5,7 +5,8 @@
             "includePath": [
                 "${default}",
                 "${workspaceFolder}/engine/3rdparty/**",
-                "${workspaceFolder}/engine/source/**"
+                "${workspaceFolder}/engine/source/**",
+                "${workspaceFolder}/engine/3rdparty/spdlog/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
