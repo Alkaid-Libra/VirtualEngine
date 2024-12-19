@@ -240,7 +240,7 @@ namespace VE
         return v + uv + uuv;
     }
 
-    Radian Quaternion::getRoll(bool reproject_axis = true) const
+    Radian Quaternion::getRoll(bool reproject_axis) const
     {
         if (reproject_axis)
         {
@@ -261,7 +261,7 @@ namespace VE
             return Radian(Math::asin(-2 * (x * z - w * y)));
         }
     }
-    Radian Quaternion::getPitch(bool reproject_axis = true) const //// !!!! Maybe Error
+    Radian Quaternion::getPitch(bool reproject_axis) const //// !!!! Maybe Error
     {
         if (reproject_axis)
         {
@@ -283,7 +283,7 @@ namespace VE
             return Radian(Math::atan2(2 * (y * z + w * x), w * w - x * x - y * y + z * z));
         }
     }
-    Radian Quaternion::getYaw(bool reproject_axis = true) const
+    Radian Quaternion::getYaw(bool reproject_axis) const
     {
         if (reproject_axis)
         {
@@ -346,7 +346,7 @@ namespace VE
             return r;
         }
     }
-    Quaternion Quaternion::nLerp(float t, const Quaternion& kp, const Quaternion& kq, bool shortest_path = false)
+    Quaternion Quaternion::nLerp(float t, const Quaternion& kp, const Quaternion& kq, bool shortest_path)
     {
         Quaternion result;
         float cos_value = kp.dot(kq);

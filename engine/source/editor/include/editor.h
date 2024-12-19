@@ -1,4 +1,7 @@
+#pragma once
+
 #include "runtime/core/base/public_singleon.h"
+#include "runtime/core/math/vector2.h"
 
 namespace VE
 {
@@ -7,6 +10,8 @@ namespace VE
 
     class VirtualEditor : public PublicSingleton<VirtualEditor>
     {
+        friend class PublicSingleton<VirtualEditor>;
+
     public:
         virtual ~VirtualEditor();
 
@@ -21,5 +26,7 @@ namespace VE
         void onWindowChanged(float pos_x, float pos_y, float width, float height) const;
         size_t onUpdateCursorOnAxis(int axis_mode, const Vector2& cursor_uv, const Vector2& window_size) const;
         
+        std::shared_ptr<EditorUI> m_editor_ui;
+        VirtualEngine* m_engine_runtime{nullptr};
     };
 }

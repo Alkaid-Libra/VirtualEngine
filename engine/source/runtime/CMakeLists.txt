@@ -35,3 +35,7 @@ target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${json_includ
 
 target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${ENGINE_ROOT_DIR}/source>)
 target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${ENGINE_ROOT_DIR}/source/runtime>)
+
+# target_include_directories(${TARGET_NAME} 
+#     PUBLIC $<BUILD_INTERFACE:${ENGINE_ROOT_DIR}/source/runtime/function/render/include>
+#     $<INSTALL_INTERFACE:include/${TARGET_NAME}-${PROJECT_VERSION}>)
