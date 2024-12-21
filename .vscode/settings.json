@@ -129,6 +129,7 @@
         "vec4i": "cpp",
         "vec4ui": "cpp",
         "cassert": "cpp",
-        "core": "cpp"
+        "core": "cpp",
+        "camera": "cpp"
     }
 }

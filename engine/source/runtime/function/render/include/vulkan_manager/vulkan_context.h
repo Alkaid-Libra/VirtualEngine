@@ -131,6 +131,8 @@ namespace VE
                                      VkImageTiling                tiling,
                                      VkFormatFeatureFlags         features);      
 
+        VkSurfaceFormatKHR
+        chooseSwapchainSurfaceFormatFromDetails(const std::vector<VkSurfaceFormatKHR>& available_surface_formats);
         VkPresentModeKHR
         chooseSwapchainPresentModeFromDetails(const std::vector<VkPresentModeKHR>& available_present_modes);
         VkExtent2D chooseSwapchainExtentFromDetails(const VkSurfaceCapabilitiesKHR& capabilities);                              
