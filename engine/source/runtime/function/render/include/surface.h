@@ -32,6 +32,12 @@ namespace VE
     public:
         SurfaceUI() {}
         int initialize(SurfaceRHI* rhi, VirtualRenderer* vrenderer, std::shared_ptr<SurfaceIO> vio);
+        void tick_pre(UIState* uistate);
+        // virtual void onTick(UIState* uistate) = 0;
+        void tick_post(UIState* uistate);
+
+        void draw_frame();
+        int clear();
 
     protected:
         float getContentScale() const;

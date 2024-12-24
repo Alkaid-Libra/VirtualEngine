@@ -60,7 +60,7 @@ namespace VE
             while (!glfwWindowShouldClose(m_window))
             {
                 glfwPollEvents();
-                // return true;
+                return true;
             }
             return false;
         }

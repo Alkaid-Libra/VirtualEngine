@@ -21,6 +21,21 @@ uint32_t VE::VVulkanUtil::findMemoryType(VkPhysicalDevice         physical_devic
     throw std::runtime_error("findMemoryType");
 }
 
+VkShaderModule createShaderModule(VkDevice device, const std::vector<char>& shader_code)
+{
+    VkShaderModuleCreateInfo shader_module_create_info{};
+    shader_module_create_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+    shader_module_create_info.codeSize = shader_code.size();
+    shader_module_create_info.pCode = reinterpret_cast<const uint32_t*>(shader_code.data());
+
+    VkShaderModule shader_module;
+    if (vkCreateShaderModule(device, &shader_module_create_info, nullptr, &shader_module) != VK_SUCCESS)
+    {
+        return VK_NULL_HANDLE;
+    }
+    return shader_module;
+}
+
 VkImageView VE::VVulkanUtil::createImageView(VkDevice           device,
                                              VkImage&           image,
                                              VkFormat           format,

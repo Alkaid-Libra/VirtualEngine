@@ -15,6 +15,8 @@
 #include <GLFW/glfw3.h>
 
 #include "vulkan_context.h"
+#include "vulkan_passes.h"
+// #include "vulkan_gl"
 
 namespace VE
 {
@@ -60,13 +62,55 @@ namespace VE
         VVulkanContext m_vulkan_context;
 
 
+    private:
+        // global rendering resource, include IBL data, global storage buffer
+        VGlobalRenderResource m_global_render_resource;
+        // include lighting, shadow, post process, mouse picking pass
+        VLightingPass m_mesh_lighting_pass;
+        VDirectionalLightPass m_directional_light_pass;
+        VPointLightPass m_point_light_pass;
+        VPostprocessPass m_postprocess_pass;
+        VPickPass m_mouse_pick_pass;
+
+
     public:
         
 
+        VkCommandBuffer getCurrentCommandBuffer();
+        VkRenderPass getLightingPass();
 
         // rendering config
         static bool m_enable_validation_layers;
         static bool m_enable_debug_utils_label;
         static bool m_enable_point_light_shadow;
+
+        static uint32_t const m_max_frames_in_flight = 3;
+        uint32_t m_current_frame_index = 0;
+        bool m_frame_swapchain_image_acquired[m_max_frames_in_flight];
+
+        // global descriptor pool
+        VkDescriptorPool m_descriptor_pool;
+
+
+        static uint32_t m_max_vertex_blending_mesh_count;
+        static uint32_t m_max_material_count;
+
+        VkCommandPool m_command_pools[m_max_frames_in_flight];
+        VkCommandBuffer m_command_buffers[m_max_frames_in_flight];
+        VkSemaphore m_image_available_for_render_semaphores[m_max_frames_in_flight];
+        VkSemaphore m_image_finished_for_presentation_semaphores[m_max_frames_in_flight];
+        VkFence m_is_frame_in_flight_fences[m_max_frames_in_flight];
+
+
+
+
+    private:
+        
+        uint32_t m_current_swapchain_image_index = 0;
+        // std::vector<VkFramebuffer> m_swapchain_framebuffer;
+
+        // 
+        public:
+        std::vector<VkFramebuffer> m_swapchain_framebuffer;
     };
 } // namespace VE

@@ -16,14 +16,14 @@ if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${GENERATED_SHADER_FOLDER}/spv)
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${GENERATED_SHADER_FOLDER}/spv)
 endif()
 
-# include(${VIRTUALENGINE_ROOT_DIR}/cmake/ShaderCompile.cmake)
+include(${VIRTUALENGINE_ROOT_DIR}/cmake/ShaderCompile.cmake)
 
-# compile_shader(
-#     "${SHADER_FILES}"
-#     "${TARGET_NAME}"
-#     "${SHADER_INCLUDE_FOLDER}"
-#     "${GENERATED_SHADER_FOLDER}"
-#     "${glslangValidator_executable}"
-# )
+compile_shader(
+    "${SHADER_FILES}"
+    "${TARGET_NAME}"
+    "${SHADER_INCLUDE_FOLDER}"
+    "${GENERATED_SHADER_FOLDER}"
+    "${glslangValidator_executable}"
+)
 
-# set_target_properties("${TARGET_NAME}" PROPERTIES FOLDER "Engine")
+set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "Engine")
