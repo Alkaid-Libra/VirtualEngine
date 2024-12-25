@@ -6,7 +6,7 @@ int VE::VVulkanManager::initialize(GLFWwindow* window, class Scene& scene, Virtu
 
 
 
-    if (initializeCommandPool() && initializeCommandBuffers() && initializeDescriptorPool()// && initializeRenderPass()// &&
+    if (initializeCommandPool() && initializeCommandBuffers() && initializeDescriptorPool() && initializeRenderPass()// &&
         )
         return 1;
     else

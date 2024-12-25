@@ -66,8 +66,8 @@ int SurfaceUI::initialize(SurfaceRHI* rhi, VirtualRenderer* vrenderer, std::shar
     // init_info.QueueFamily = rhi->m_vulkan_manager->m_vulkan_context._queue_indices.graphicsFamily.value();
     // init_info.Queue = rhi->m_vulkan_manager->m_vulkan_context._graphics_queue;
     // init_info.DescriptorPool = rhi->m_vulkan_manager->m_descriptor_pool;
-    // // init_info.RenderPass = renderPass; // Modify: if not dynamic render
-    // init_info.RenderPass = rhi->m_vulkan_manager->getLightingPass(); // Modify: dynamic render
+    // // init_info.RenderPass = rhi->m_vulkan_manager->m_triangle._framebuffer.render_pass;// renderPass; // Modify: if not dynamic render
+    // init_info.RenderPass = rhi->m_vulkan_manager->getLightingPass(); // Modify: if not dynamic render
     // init_info.Subpass = 1;
     // // ?? may be different from the real swapchain image count // see: Imgui_ImplVulkanH_GetMinImageCountFromPresentMode
     // init_info.MinImageCount = rhi->m_vulkan_manager->m_max_frames_in_flight;

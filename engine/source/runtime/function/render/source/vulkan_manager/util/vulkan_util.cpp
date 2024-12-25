@@ -21,7 +21,7 @@ uint32_t VE::VVulkanUtil::findMemoryType(VkPhysicalDevice         physical_devic
     throw std::runtime_error("findMemoryType");
 }
 
-VkShaderModule createShaderModule(VkDevice device, const std::vector<char>& shader_code)
+VkShaderModule VE::VVulkanUtil::createShaderModule(VkDevice device, const std::vector<char>& shader_code)
 {
     VkShaderModuleCreateInfo shader_module_create_info{};
     shader_module_create_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;

@@ -36,6 +36,15 @@ target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${json_includ
 target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${ENGINE_ROOT_DIR}/source>)
 target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${ENGINE_ROOT_DIR}/source/runtime>)
 
+
+# compile shader to spv
+# add_dependencies(${TARGET_NAME} ${SHADER_COMPILE_TARGET})
+
+# precompile
+# set global vari used by precompile
+set(VIRTUAL_RUNTIME_HEADS "${HEADER_FILES}" PARENT_SCOPE)
+
+
 # target_include_directories(${TARGET_NAME} 
 #     PUBLIC $<BUILD_INTERFACE:${ENGINE_ROOT_DIR}/source/runtime/function/render/include>
 #     $<INSTALL_INTERFACE:include/${TARGET_NAME}-${PROJECT_VERSION}>)

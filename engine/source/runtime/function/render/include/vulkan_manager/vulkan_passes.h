@@ -23,17 +23,17 @@ namespace VE
 
     };
 
-    class VTrianglePass : public VRenderPassBase
-    {
+    // class VTrianglePass : public VRenderPassBase
+    // {
 
 
-    private:
-        void setupRenderPass();
-        void setupPipelines();
-        void setupFramebuffer();
+    // public:
+    //     void setupRenderPass();
+    //     void setupPipelines();
+    //     void setupFramebuffer();
 
-        // 
-        void createFramebuffers();
-        std::vector<char> readFile(const std::string& filename);
-    };
+    //     // 
+    //     void createFramebuffers();
+    //     std::vector<char> readFile(const std::string& filename);
+    // };
 } // namespace VE
