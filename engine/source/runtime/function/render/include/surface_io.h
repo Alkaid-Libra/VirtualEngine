@@ -2,8 +2,22 @@
 
 #include <GLFW/glfw3.h>
 
+// 
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_vulkan.h>
+#include <vulkan/vulkan.h>
+#include "runtime/function/render/include/surface.h"
+
 namespace VE
 {
+
+
+
+
+
+
+
+    
     class SurfaceIO
     {
 
@@ -61,6 +75,41 @@ namespace VE
             {
                 glfwPollEvents();
                 return true;
+
+                // // 
+                // // Start the Dear ImGui frame
+                // ImGui_ImplVulkan_NewFrame();
+                // ImGui_ImplGlfw_NewFrame();
+                // ImGui::NewFrame();
+
+                // ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+                // ImGui::Text("This is some useful text.");
+                // ImGui::End();
+
+
+
+
+
+
+
+                // VkCommandBuffer current_command_buffer;// = m_rhi->m_vulkan_manager->getCurrentCommandBuffer();
+
+                // // if (m_rhi->m_vulkan_manager->m_enable_debug_untils_label)
+                // // {
+                //     VkDebugUtilsLabelEXT label_info = {
+                //         VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT, NULL, "ImGUI", {1.0f, 1.0f, 1.0f, 1.0f}};
+                //     m_rhi->m_vulkan_manager->_vkCmdBeginDebugUtilsLabelEXT(current_command_buffer,
+                //                                                                             &label_info);
+                // // }
+                // // Rendering
+                // ImGui::Render();
+                // // VkCommandBuffer commandBuffer = beginFrame();
+
+                // ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), current_command_buffer);
+
+                // // endFrame(commandBuffer);
+
             }
             return false;
         }

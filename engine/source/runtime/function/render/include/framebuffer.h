@@ -17,6 +17,12 @@ namespace VE
 
     class Scene
     {
+    public:
+        bool m_loaded = false;
+
+
+
+
 
     };
 

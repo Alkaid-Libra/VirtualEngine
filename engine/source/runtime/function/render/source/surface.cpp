@@ -6,11 +6,14 @@ namespace VE
     {
         if (m_io->tick_NotQuit())
         {
-            // if (framebuffer && framebuffer->m_scene && framebuffer_>m_render->m_loaded)
-            if (true)
+            // if (framebuffer && framebuffer->m_scene && framebuffer->m_scene->m_loaded)
+            if (framebuffer)
             {
-                // m_rhi->tick_pre(framebuffer, release_handles);
+                m_rhi->tick_pre(framebuffer, release_handles);
                 m_ui->tick_pre(uistate);
+
+                m_ui->tick_post(uistate);
+                m_rhi->tick_post(framebuffer);
             }
 
 

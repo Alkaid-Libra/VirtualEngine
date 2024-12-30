@@ -20,6 +20,9 @@ namespace VE
         SurfaceRHI(VirtualRenderer* vrenderer) : m_virtual_renderer(vrenderer) {}
         
         int initialize(SurfaceIO* io, const FrameBuffer* framebuffer);
+
+        void tick_pre(const FrameBuffer* framebuffer, SceneReleaseHandles& release_handles);
+        void tick_post(const FrameBuffer* framebuffer);
     };
 
     class SurfaceUI
@@ -32,6 +35,7 @@ namespace VE
     public:
         SurfaceUI() {}
         int initialize(SurfaceRHI* rhi, VirtualRenderer* vrenderer, std::shared_ptr<SurfaceIO> vio);
+        void fontsUpload(SurfaceRHI* rhi);
         void tick_pre(UIState* uistate);
         // virtual void onTick(UIState* uistate) = 0;
         void tick_post(UIState* uistate);
@@ -55,17 +59,19 @@ namespace VE
         {
             m_io->initialize();
             m_rhi->initialize(m_io.get(), framebuffer);
-            return 0;
+            return onInit();
         }
 
-        bool setSurfaceUI(std::shared_ptr<SurfaceUI> vui)
+        bool setSurfaceUI(std::shared_ptr<SurfaceUI> pui)
         {
-            m_ui = vui;
+            m_ui = pui;
             m_ui->initialize(m_rhi.get(), m_render, m_io);
             return true;
         }
         bool tick(const FrameBuffer* framebuffer, UIState* uistate, SceneReleaseHandles& release_handles);
 
+
+        virtual int onInit() { return 0; }
 
     private:
         std::shared_ptr<SurfaceUI> m_ui;

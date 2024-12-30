@@ -15,6 +15,17 @@
 
 namespace VE
 {
+    const FrameBuffer* getFrameBuffer(ThreeFrameBuffers* t, const VirtualRenderer*)
+    {
+        return t->consumingBufferShift();
+    }
+
+    const FrameBuffer* ThreeFrameBuffers::consumingBufferShift()
+    {
+        m_consuming_index = m_last_producing_index;
+        return three_buffers._array[m_consuming_index];
+    }
+
 
     VirtualEngine::VirtualEngine() { m_renderer = std::make_shared<VirtualRenderer>(); }
 
@@ -29,10 +40,16 @@ namespace VE
         WorldManager::getInstance().initialize();
         SceneManager::getInstance().initialize();
 
+        m_tri_frame_buffer.initialize();
+        m_renderer->ResgisterGetPtr(std::bind(&getFrameBuffer, &m_tri_frame_buffer, std::placeholders::_1));
         m_renderer->initialize();
 
         LOG_INFO("engine start");
     }
+
+
+
+    void VirtualEngine::initialize() {}
 
     void VirtualEngine::run()
     {
@@ -67,6 +84,23 @@ namespace VE
     }
 
     bool VirtualEngine::rendererTick() { return m_renderer->tick(); }
+
+
+    void ThreeFrameBuffers::initialize()
+    {
+        three_buffers._struct._A = new FrameBuffer();
+        three_buffers._struct._B = new FrameBuffer();
+        three_buffers._struct._C = new FrameBuffer();
+
+        // tri frame buffers are designed to use same scene now
+        auto current_scene = SceneManager::getInstance().getCurrentScene();
+        three_buffers._struct._A->m_scene = current_scene;
+        three_buffers._struct._B->m_scene = current_scene;
+        three_buffers._struct._C->m_scene = current_scene;
+
+
+    }
+
 
     FrameBuffer* ThreeFrameBuffers::producingBufferShift()
     {

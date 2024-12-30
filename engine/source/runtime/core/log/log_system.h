@@ -1,6 +1,6 @@
 #pragma once
 
-#include "runtime/core/base/public_singleon.h"
+#include "runtime/core/base/public_singleton.h"
 
 #include <spdlog/spdlog.h>
 

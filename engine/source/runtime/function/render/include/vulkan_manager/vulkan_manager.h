@@ -16,7 +16,7 @@
 
 #include "vulkan_context.h"
 #include "vulkan_passes.h"
-// #include "vulkan_gl"
+#include "vulkan_mesh.h"
 
 namespace VE
 {
@@ -108,6 +108,11 @@ namespace VE
         
         uint32_t m_current_swapchain_image_index = 0;
         // std::vector<VkFramebuffer> m_swapchain_framebuffer;
+
+        // viewport info
+        VkViewport m_viewport = {0, 0, 1280, 720, 0, 1};
+        VkRect2D m_scissor = {{0, 0}, {1280, 720}};
+
 
         // 
         public:

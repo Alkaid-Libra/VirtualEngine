@@ -19,7 +19,7 @@ int main()
     params.m_config_file_path = virtual_root_folder / "VirtualEditor.ini";
 
     VE::VirtualEngine::getInstance().startEngine(params);
-
+    VE::VirtualEngine::getInstance().initialize();
 
 
     VE::VirtualEditor::getInstance().initialize(&(VE::VirtualEngine::getInstance()));

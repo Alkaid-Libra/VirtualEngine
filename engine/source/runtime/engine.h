@@ -1,6 +1,6 @@
 #pragma once
 
-#include "runtime/core/base/public_singleon.h"
+#include "runtime/core/base/public_singleton.h"
 
 #include <filesystem>
 #include <atomic>
@@ -38,8 +38,13 @@ namespace VE
         size_t m_consuming_index{0};
 
     public:
+        void initialize();
+
         FrameBuffer* producingBufferShift();
         FrameBuffer* getProducingBuffer();
+
+        const FrameBuffer* consumingBufferShift();
+        const FrameBuffer* getConsumingBuffer();
         
     };
 
