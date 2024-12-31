@@ -9,19 +9,20 @@
 
 namespace VE
 {
-#if defined(_REFLECTION_PARSER_)
+#if defined(__REFLECTION_PARSER__)
 #define META(...) __attribute__((annotate(#__VA_ARGS__)))
-#define CLASS(class_name...) class __attribute__((annotate(#__VA_ARGS__))) class_name
+#define CLASS(class_name, ...) class __attribute__((annotate(#__VA_ARGS__))) class_name
 #define STRUCT(struct_name, ...) struct __attribute__((annotate(#__VA_ARGS__))) struct_name
+//#define CLASS(class_name,...) class __attribute__((annotate(#__VA_ARGS__))) class_name:public Reflection::object
 #else
 #define META(...)
 #define CLASS(class_name, ...) class class_name
 #define STRUCT(struct_name, ...) struct struct_name
-#endif // _REFLECTION_PARSER_
+#endif // __REFLECTION_PARSER__
 
 #define REFLECTION_BODY(class_name) \
     friend class Reflection::TypeFieldReflectionOperator::Type##class_name##Operator; \
-    friend class PSerializer; // todo in serializer.h
+    friend class Serializer; // todo in serializer.h
 
 #define REFLECTION_TYPE(class_name) \
     namespace Reflection \
@@ -32,10 +33,10 @@ namespace VE
         } \
     };
 
-// #define REGISTER_FIELD_TO_MAP(name, value) TypeMetaRegisterinterface::registerToFieldMap(name, value); //Maybe location is error
-// #define REGISTER_BASE_CLASS_TO_MAP(name, value) TypeMetaRegisterinterface::registerToClassMap(name, value); //Maybe location is error
-// #define REGISTER_ARRAY_TO_MAP(name, value) TypeMetaRegisterinterface::registerToArrayMap(name, value); //Maybe location is error
-// #define UNREGISTER_ALL(name, value) TypeMetaRegisterinterface::unregisterAll(name, value); //Maybe location is error
+#define REGISTER_FIELD_TO_MAP(name, value) TypeMetaRegisterinterface::registerToFieldMap(name, value); //Maybe location is error
+#define REGISTER_BASE_CLASS_TO_MAP(name, value) TypeMetaRegisterinterface::registerToClassMap(name, value); //Maybe location is error
+#define REGISTER_ARRAY_TO_MAP(name, value) TypeMetaRegisterinterface::registerToArrayMap(name, value); //Maybe location is error
+#define UNREGISTER_ALL(name, value) TypeMetaRegisterinterface::unregisterAll(name, value); //Maybe location is error
 
 #define VIRTUAL_REFLECTION_NEW(name, ...) Reflection::ReflectionPtr(#name, new name(__VA_ARGS__))
 #define VIRTUAL_REFLECTION_DELETE(value) \
@@ -66,8 +67,8 @@ namespace VE
     struct is_safely_castable<T, U, std::void_t<decltype(static_cast<U>(std::declval<T>()))>> : std::true_type {};
 
     typedef std::function<int(Reflection::ReflectionInstance*&, void*)> getBaseClassReflectionInstanceListFunc;
-    typedef std::function<void*(const VJson&)> constructorWithVJson;
-    typedef std::function<VJson(void*)> writeVJsonByName;
+    typedef std::function<void*(const Json&)> constructorWithJson;
+    typedef std::function<Json(void*)> writeJsonByName;
 
     typedef std::function<void(void*, void*)> setFuncion;
     typedef std::function<void*(void*)> getFuncion;
@@ -77,20 +78,20 @@ namespace VE
     typedef std::function<void*(int, void*)> getArrayFunc;
     typedef std::function<int(void*)> getSizeFunc;
 
-    typedef std::tuple<getBaseClassReflectionInstanceListFunc, constructorWithVJson, writeVJsonByName>
-                                                                                                class_function_tuple;
+    typedef std::tuple<getBaseClassReflectionInstanceListFunc, constructorWithJson, writeJsonByName>
+                                                                                                ClassFunctionTuple;
     typedef std::tuple<setFuncion, getFuncion, getNameFuncion, getNameFuncion, getNameFuncion, getBoolFunc>
-                                                                                                field_function_tuple;
-    typedef std::tuple<setArrayFunc, getArrayFunc, getSizeFunc, getNameFuncion, getNameFuncion> array_function_tuple;
+                                                                                                FieldFunctionTuple;
+    typedef std::tuple<setArrayFunc, getArrayFunc, getSizeFunc, getNameFuncion, getNameFuncion> ArrayFunctionTuple;
 
     namespace Reflection
     {
         class TypeMetaRegisterinterface
         {
         public:
-            static void registerToClassMap(const char* name, class_function_tuple* value);
-            static void registerToFieldMap(const char* name, field_function_tuple* value);
-            static void registerToArrayMap(const char* name, array_function_tuple* value);
+            static void registerToClassMap(const char* name, ClassFunctionTuple* value);
+            static void registerToFieldMap(const char* name, FieldFunctionTuple* value);
+            static void registerToArrayMap(const char* name, ArrayFunctionTuple* value);
 
             static void unregisterAll();
         };
@@ -108,8 +109,8 @@ namespace VE
             static TypeMeta newMetaFromName(std::string type_name);
 
             static bool newArrayAccessorFromName(std::string array_type_name, ArrayAccessor& accessor);
-            static ReflectionInstance newFromNameAndVJson(std::string type_name, const VJson& json_context);
-            static VJson writeByName(std::string type_name, void* instance);
+            static ReflectionInstance newFromNameAndJson(std::string type_name, const Json& json_context);
+            static Json writeByName(std::string type_name, void* instance);
 
             std::string getTypeName();
 
@@ -162,10 +163,10 @@ namespace VE
             FieldAccessor& operator=(const FieldAccessor& dest);
 
         private:
-            FieldAccessor(field_function_tuple* functions);
+            FieldAccessor(FieldFunctionTuple* functions);
 
         private:
-            field_function_tuple* m_functions;
+            FieldFunctionTuple* m_functions;
             const char* m_field_name;
             const char* m_field_type_name;
         };
@@ -187,10 +188,10 @@ namespace VE
             ArrayAccessor& operator=(ArrayAccessor& dest);
 
         private:
-            ArrayAccessor(array_function_tuple* array_func);
+            ArrayAccessor(ArrayFunctionTuple* array_func);
 
         private:
-            array_function_tuple* m_func;
+            ArrayFunctionTuple* m_func;
             const char* m_array_type_name;
             const char* m_element_type_name;
         };

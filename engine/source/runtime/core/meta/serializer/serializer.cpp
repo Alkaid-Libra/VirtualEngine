@@ -4,24 +4,24 @@
 namespace VE
 {
     template<>
-    VJson VSerializer::write(const char& instance)
+    Json Serializer::write(const char& instance)
     {
-        return VJson(instance);
+        return Json(instance);
     }
     template<>
-    char& VSerializer::read(const VJson& json_context, char& instance)
+    char& Serializer::read(const Json& json_context, char& instance)
     {
         assert(json_context.is_number());
         return instance = json_context.number_value();
     }
 
     template<>
-    VJson VSerializer::write(const int& instance)
+    Json Serializer::write(const int& instance)
     {
-        return VJson(instance);
+        return Json(instance);
     }
     template<>
-    int& VSerializer::read(const VJson& json_context, int& instance)
+    int& Serializer::read(const Json& json_context, int& instance)
     {
         auto hh = json_context.type();
         assert(json_context.is_number());
@@ -29,60 +29,60 @@ namespace VE
     }
 
     template<>
-    VJson VSerializer::write(const unsigned int& instance)
+    Json Serializer::write(const unsigned int& instance)
     {
-        return VJson(static_cast<int>(instance));
+        return Json(static_cast<int>(instance));
     }
     template<>
-    unsigned int& VSerializer::read(const VJson& json_context, unsigned int& instance)
+    unsigned int& Serializer::read(const Json& json_context, unsigned int& instance)
     {
         assert(json_context.is_number());
         return instance = static_cast<unsigned int>(json_context.number_value());
     }
 
     template<>
-    VJson VSerializer::write(const float& instance)
+    Json Serializer::write(const float& instance)
     {
-        return VJson(instance);
+        return Json(instance);
     }
     template<>
-    float& VSerializer::read(const VJson& json_context, float& instance)
-    {
-        assert(json_context.is_number());
-        return instance = static_cast<float>(json_context.number_value());
-    }
-
-    template<>
-    VJson VSerializer::write(const double& instance)
-    {
-        return VJson(instance);
-    }
-    template<>
-    double& VSerializer::read(const VJson& json_context, double& instance)
+    float& Serializer::read(const Json& json_context, float& instance)
     {
         assert(json_context.is_number());
         return instance = static_cast<float>(json_context.number_value());
     }
 
     template<>
-    VJson VSerializer::write(const bool& instance)
+    Json Serializer::write(const double& instance)
     {
-        return VJson(instance);
+        return Json(instance);
     }
     template<>
-    bool& VSerializer::read(const VJson& json_context, bool& instance)
+    double& Serializer::read(const Json& json_context, double& instance)
+    {
+        assert(json_context.is_number());
+        return instance = static_cast<float>(json_context.number_value());
+    }
+
+    template<>
+    Json Serializer::write(const bool& instance)
+    {
+        return Json(instance);
+    }
+    template<>
+    bool& Serializer::read(const Json& json_context, bool& instance)
     {
         assert(json_context.is_bool());
         return instance = json_context.bool_value();
     }
 
     template<>
-    VJson VSerializer::write(const std::string& instance)
+    Json Serializer::write(const std::string& instance)
     {
-        return VJson(instance);
+        return Json(instance);
     }
     template<>
-    std::string& VSerializer::read(const VJson& json_context, std::string& instance)
+    std::string& Serializer::read(const Json& json_context, std::string& instance)
     {
         assert(json_context.is_string());
         return instance = json_context.string_value();

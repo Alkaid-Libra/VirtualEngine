@@ -8,6 +8,6 @@ namespace VE
 
     int SceneManager::tick(FrameBuffer* buffer)
     {
-
+        return 0;
     }
 } // namespace VE

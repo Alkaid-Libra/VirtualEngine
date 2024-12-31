@@ -9,17 +9,17 @@ namespace VE
     template<typename...>
     inline constexpr bool always_false = false;
 
-    class VSerializer
+    class Serializer
     {
     public:
         template<typename T>
-        static VJson writePointer(T* instance)
+        static Json writePointer(T* instance)
         {
-            return VJson::object { {"$typeName", VJson{"*"}}, {"$context", VSerializer::write(*instance)} };
+            return Json::object { {"$typeName", Json{"*"}}, {"$context", Serializer::write(*instance)} };
         }
 
         template<typename T>
-        static T*& readPointer(const VJson& json_context, T*& instance)
+        static T*& readPointer(const Json& json_context, T*& instance)
         {
             assert(instance == nullptr);
             std::string type_name = json_context["$typeName"].string_value();
@@ -29,21 +29,25 @@ namespace VE
                 instance = new T;
                 read(json_context["$context"], *instance);
             }
-
-            return VJson::object { {"$typeName", VJson{"*"}}, {"$context", VSerializer::write(*instance)} };
+            else
+            {
+                instance = static_cast<T*>(
+                    Reflection::TypeMeta::newFromNameAndJson(type_name, json_context["$context"]).m_instance);
+            }
+            return instance;
         }
 
         template<typename T>
-        static VJson write(const Reflection::ReflectionPtr<T>& instance)
+        static Json write(const Reflection::ReflectionPtr<T>& instance)
         {
             T* instance_ptr = static_cast<T*>(instance.operator->());
             std::string type_name = instance.getTypeName();
-            return VJson::object { {"$typeName", VJson(type_name)},
+            return Json::object { {"$typeName", Json(type_name)},
                                    {"$context", Reflection::TypeMeta::writeByName(type_name, instance_ptr)} };
         }
 
         template<typename T>
-        static VJson read(const VJson& json_context, Reflection::ReflectionPtr<T>& instance)
+        static T*& read(const Json& json_context, Reflection::ReflectionPtr<T>& instance)
         {
             std::string type_name = json_context["$typeName"].string_value();
             instance.setTypeName(type_name);
@@ -51,7 +55,7 @@ namespace VE
         }
 
         template<typename T>
-        static VJson write(const T& instance)
+        static Json write(const T& instance)
         {
             if constexpr (std::is_pointer<T>::value)
             {
@@ -59,13 +63,13 @@ namespace VE
             }
             else
             {
-                static_assert(always_false<T>, "VSerializer::write<T> has not been implemented yet!");
-                return VJson();
+                static_assert(always_false<T>, "Serializer::write<T> has not been implemented yet!");
+                return Json();
             }
         }
 
         template<typename T>
-        static T& read(const VJson& json_context, T& instance)
+        static T& read(const Json& json_context, T& instance)
         {
             if constexpr (std::is_pointer<T>::value)
             {
@@ -73,7 +77,7 @@ namespace VE
             }
             else
             {
-                static_assert(always_false<T>, "VSerializer::read<T> has not been implemented yet!");
+                static_assert(always_false<T>, "Serializer::read<T> has not been implemented yet!");
                 return instance;
             }
         }
@@ -81,37 +85,37 @@ namespace VE
 
     // implementation of base types - template instantionlize
     template<>
-    VJson VSerializer::write(const char& instance);
+    Json Serializer::write(const char& instance);
     template<>
-    char& VSerializer::read(const VJson& json_context, char& instance);
+    char& Serializer::read(const Json& json_context, char& instance);
 
     template<>
-    VJson VSerializer::write(const int& instance);
+    Json Serializer::write(const int& instance);
     template<>
-    int& VSerializer::read(const VJson& json_context, int& instance);
+    int& Serializer::read(const Json& json_context, int& instance);
 
     template<>
-    VJson VSerializer::write(const unsigned int& instance);
+    Json Serializer::write(const unsigned int& instance);
     template<>
-    unsigned int& VSerializer::read(const VJson& json_context, unsigned int& instance);
+    unsigned int& Serializer::read(const Json& json_context, unsigned int& instance);
 
     template<>
-    VJson VSerializer::write(const float& instance);
+    Json Serializer::write(const float& instance);
     template<>
-    float& VSerializer::read(const VJson& json_context, float& instance);
+    float& Serializer::read(const Json& json_context, float& instance);
 
     template<>
-    VJson VSerializer::write(const double& instance);
+    Json Serializer::write(const double& instance);
     template<>
-    double& VSerializer::read(const VJson& json_context, double& instance);
+    double& Serializer::read(const Json& json_context, double& instance);
 
     template<>
-    VJson VSerializer::write(const bool& instance);
+    Json Serializer::write(const bool& instance);
     template<>
-    bool& VSerializer::read(const VJson& json_context, bool& instance);
+    bool& Serializer::read(const Json& json_context, bool& instance);
 
     template<>
-    VJson VSerializer::write(const std::string& instance);
+    Json Serializer::write(const std::string& instance);
     template<>
-    std::string& VSerializer::read(const VJson& json_context, std::string& instance);
+    std::string& Serializer::read(const Json& json_context, std::string& instance);
 } // namespace VE

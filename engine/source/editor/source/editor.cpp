@@ -21,6 +21,7 @@ namespace VE
 
         render->setSurfaceUI(m_editor_ui);
     }
+    void VirtualEditor::clear() {}
 
     void VirtualEditor::run()
     {

@@ -76,7 +76,7 @@ int SurfaceUI::initialize(SurfaceRHI* rhi, VirtualRenderer* vrenderer, std::shar
     ImGui_ImplVulkan_Init(&init_info);
 
     // fonts upload
-    fontsUpload(rhi);
+    // fontsUpload(rhi);
 
 
 

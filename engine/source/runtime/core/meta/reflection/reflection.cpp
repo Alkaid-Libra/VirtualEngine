@@ -8,18 +8,18 @@ namespace VE
     const char* k_unknown_type = "UnknownType";
     const char* k_unknown = "Unknown";
 
-    static std::map<std::string, class_function_tuple*> m_class_map;
-    static std::multimap<std::string, field_function_tuple*> m_field_map;
-    static std::map<std::string, array_function_tuple*> m_array_map;
+    static std::map<std::string, ClassFunctionTuple*> m_class_map;
+    static std::multimap<std::string, FieldFunctionTuple*> m_field_map;
+    static std::map<std::string, ArrayFunctionTuple*> m_array_map;
 
     namespace Reflection
     {
-        void TypeMetaRegisterinterface::registerToFieldMap(const char* name, field_function_tuple* value)
+        void TypeMetaRegisterinterface::registerToFieldMap(const char* name, FieldFunctionTuple* value)
         {
             m_field_map.insert(std::make_pair(name, value));
         }
 
-        void TypeMetaRegisterinterface::registerToArrayMap(const char* name, array_function_tuple* value)
+        void TypeMetaRegisterinterface::registerToArrayMap(const char* name, ArrayFunctionTuple* value)
         {
             if (m_array_map.find(name) == m_array_map.end())
             {
@@ -31,7 +31,7 @@ namespace VE
             }
         }
 
-        void TypeMetaRegisterinterface::registerToClassMap(const char* name, class_function_tuple* value)
+        void TypeMetaRegisterinterface::registerToClassMap(const char* name, ClassFunctionTuple* value)
         {
             if (m_class_map.find(name) == m_class_map.end())
             {
@@ -101,7 +101,7 @@ namespace VE
             return false;
         }
 
-        ReflectionInstance TypeMeta::newFromNameAndVJson(std::string type_name, const VJson& json_context)
+        ReflectionInstance TypeMeta::newFromNameAndJson(std::string type_name, const Json& json_context)
         {
             auto iter = m_class_map.find(type_name);
 
@@ -113,7 +113,7 @@ namespace VE
             return ReflectionInstance();
         }
 
-        VJson TypeMeta::writeByName(std::string type_name, void* instance)
+        Json TypeMeta::writeByName(std::string type_name, void* instance)
         {
             auto iter = m_class_map.find(type_name);
 
@@ -122,7 +122,7 @@ namespace VE
                 return std::get<2>(*iter->second)(instance);
             }
 
-            return VJson();
+            return Json();
         }
 
         std::string TypeMeta::getTypeName() { return m_type_name; }
@@ -184,7 +184,7 @@ namespace VE
             m_functions = nullptr;
         }
 
-        FieldAccessor::FieldAccessor(field_function_tuple* functions) : m_functions(functions)
+        FieldAccessor::FieldAccessor(FieldFunctionTuple* functions) : m_functions(functions)
         {
             m_field_type_name = k_unknown_type;
             m_field_name = k_unknown;
@@ -245,7 +245,7 @@ namespace VE
         ArrayAccessor::ArrayAccessor() : m_func(nullptr), m_array_type_name("UnKnownType"), m_element_type_name("UnKnownType")
         {}
 
-        ArrayAccessor::ArrayAccessor(array_function_tuple* array_func) : m_func(array_func)
+        ArrayAccessor::ArrayAccessor(ArrayFunctionTuple* array_func) : m_func(array_func)
         {
             m_array_type_name = k_unknown_type;
             m_element_type_name = k_unknown_type;
@@ -270,7 +270,7 @@ namespace VE
         void* ArrayAccessor::get(int index, void* instance)
         {
             size_t count = getSize(instance);
-            std::get<1>(*m_func)(index, instance);
+            return std::get<1>(*m_func)(index, instance);
         }
 
         int ArrayAccessor::getSize(void* instance)

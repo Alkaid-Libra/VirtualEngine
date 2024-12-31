@@ -39,6 +39,7 @@ namespace VE
 
     public:
         void initialize();
+        void clear();
 
         FrameBuffer* producingBufferShift();
         FrameBuffer* getProducingBuffer();

@@ -131,6 +131,11 @@
         "cassert": "cpp",
         "core": "cpp",
         "camera": "cpp",
-        "viewport": "cpp"
+        "viewport": "cpp",
+        "mixinvector": "cpp",
+        "polytope": "cpp",
+        "buffered_value": "cpp",
+        "fast_back_stack": "cpp",
+        "notify": "cpp"
     }
 }

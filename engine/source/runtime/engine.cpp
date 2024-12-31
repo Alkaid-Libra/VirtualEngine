@@ -47,9 +47,18 @@ namespace VE
         LOG_INFO("engine start");
     }
 
+    void VirtualEngine::shutdownEngine()
+    {
+        LOG_INFO("engine shutdown");
+
+
+        m_tri_frame_buffer.clear();
+    }
+
 
 
     void VirtualEngine::initialize() {}
+    void VirtualEngine::clear() {}
 
     void VirtualEngine::run()
     {
@@ -97,8 +106,12 @@ namespace VE
         three_buffers._struct._A->m_scene = current_scene;
         three_buffers._struct._B->m_scene = current_scene;
         three_buffers._struct._C->m_scene = current_scene;
-
-
+    }
+    void ThreeFrameBuffers::clear()
+    {
+        delete three_buffers._struct._A;
+        delete three_buffers._struct._B;
+        delete three_buffers._struct._C;
     }
 
 
@@ -107,4 +120,7 @@ namespace VE
         return nullptr;
     }
     FrameBuffer* ThreeFrameBuffers::getProducingBuffer() { return nullptr; }
+
+
+
 } // namespace VE
