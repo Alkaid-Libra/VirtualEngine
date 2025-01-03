@@ -38,7 +38,10 @@ target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${ENGINE_ROOT
 
 
 # compile shader to spv
-# add_dependencies(${TARGET_NAME} ${SHADER_COMPILE_TARGET})
+add_dependencies(${TARGET_NAME} ${SHADER_COMPILE_TARGET})
+target_include_directories(
+    ${TARGET_NAME} 
+    PUBLIC $<BUILD_INTERFACE:${ENGINE_ROOT_DIR}/shader/generated/cpp>)
 
 # precompile
 # set global vari used by precompile

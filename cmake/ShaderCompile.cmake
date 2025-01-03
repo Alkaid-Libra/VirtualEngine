@@ -1,4 +1,4 @@
-function(compile_shader SHADERS TARGET_NAME SHADER_INCLUDE_FOLDER_DIR GENERATED_DIR GLSLANG_BIN)
+function(compile_shader SHADERS TARGET_NAME SHADER_INCLUDE_FOLDER GENERATED_DIR GLSLANG_BIN)
     set(working_dir "${CMAKE_CURRENT_SOURCE_DIR}")
 
     set(ALL_GENERATED_SPV_FILES "")
@@ -19,14 +19,23 @@ function(compile_shader SHADERS TARGET_NAME SHADER_INCLUDE_FOLDER_DIR GENERATED_
 
         add_custom_command(
             OUTPUT ${SPV_FILE}
-            COMMAND ${GLSLANG_BIN} -V100 -o ${SPV_FILE} ${SHADER}
+            COMMAND ${GLSLANG_BIN} -I${SHADER_INCLUDE_FOLDER} -V100 -o ${SPV_FILE} ${SHADER}
             DEPENDS ${SHADER}
             WORKING_DIRECTORY "${working_dir}"
         )
-
         list(APPEND ALL_GENERATED_SPV_FILES ${SPV_FILE})
+
+        add_custom_command(
+            OUTPUT ${CPP_FILE}
+            COMMAND ${CMAKE_COMMAND} -DPATH=${SPV_FILE} -DHEADER="${CPP_FILE}"
+                -DGLOBAL="${GLOBAL_SHADER_VAR}" -P "${VIRTUALENGINE_ROOT_DIR}/cmake/GenerateShaderCPPFile.cmake"
+                DEPENDS ${SPV_FILE}
+                WORKING_DIRECTORY "${working_dir}")
+        list(APPEND ALL_GENERATED_CPP_FILES ${CPP_FILE})
+
     endforeach()
 
-    add_custom_target(${TARGET_NAME} DEPENDS ${ALL_GENERATED_SPV_FILES} SOURCES ${SHADERS})
+    add_custom_target(${TARGET_NAME} 
+        DEPENDS ${ALL_GENERATED_SPV_FILES} ${ALL_GENERATED_CPP_FILES} SOURCES ${SHADERS})
     
 endfunction()

@@ -65,6 +65,8 @@ namespace VE
         void logicalTick(float delta_time);
         bool rendererTick();
 
+        bool rendererTick(float delta_time);
+
 
     public:
         VirtualEngine(const VirtualEngine&) = delete;
@@ -74,6 +76,7 @@ namespace VE
         void shutdownEngine();
 
         void initialize();
+        void initialize(const std::string& config_file_path);
         void clear();
 
         bool isQuit() const { return m_is_quit; }
@@ -83,4 +86,35 @@ namespace VE
         std::shared_ptr<VirtualRenderer> getRender() const { return m_renderer; }
     };
 } // namespace VE
+
+
+
+
+
+
+
+#pragma once
+
+#include <cassert>
+#include <chrono>
+#include <memory>
+#include <string>
+
+namespace Piccolo
+{
+    class PiccoloEngine
+    {
+    public:
+        void initialize(const std::string& config_file_path);
+        void shutdown();
+
+        float calculateDeltaTime();
+        bool  tickOneFrame(float delta_time);
+
+    protected:
+        bool rendererTick(float delta_time);
+
+        std::chrono::steady_clock::time_point tick_time_point_last = std::chrono::steady_clock::now(); // 上个时间点
+    };
+} // namespace Piccolo
 
