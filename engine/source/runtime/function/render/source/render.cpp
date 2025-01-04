@@ -13,7 +13,7 @@ namespace VE
     {
         auto framebuffer = f_get_framebuffer(this);
         SceneReleaseHandles release_handles;
-        bool tick_result = m_surface->tick(framebuffer, nullptr, release_handles);
+        bool tick_result = m_surface->tick(framebuffer, framebuffer->m_uistate.get(), release_handles);
         
         return tick_result;
     }

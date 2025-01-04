@@ -23,7 +23,7 @@ namespace VE
 
         bool tick();
 
-        void setSurfaceUI(std::shared_ptr<SurfaceUI> vui) { m_surface->setSurfaceUI(vui); }
+        void setSurfaceUI(std::shared_ptr<SurfaceUI> pui) { m_surface->setSurfaceUI(pui); }
 
         bool ResgisterGetPtr(VRegister<const FrameBuffer*, const VirtualRenderer*>::GetPtr get)
         {

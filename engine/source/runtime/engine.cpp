@@ -117,7 +117,15 @@ namespace VE
 
     FrameBuffer* ThreeFrameBuffers::producingBufferShift()
     {
-        return nullptr;
+        m_last_producing_index = m_producing_index;
+        do
+        {
+            m_producing_index = (m_producing_index + 1) % 3;
+        } while (m_consuming_index == m_producing_index || m_last_producing_index == m_producing_index);
+
+        three_buffers._array[m_producing_index]->logicalFrameIndex = ++m_logical_frame_index;
+
+        return three_buffers._array[m_producing_index];
     }
     FrameBuffer* ThreeFrameBuffers::getProducingBuffer() { return nullptr; }
 

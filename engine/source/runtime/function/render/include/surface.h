@@ -37,11 +37,13 @@ namespace VE
         int initialize(SurfaceRHI* rhi, VirtualRenderer* vrenderer, std::shared_ptr<SurfaceIO> vio);
         void fontsUpload(SurfaceRHI* rhi);
         void tick_pre(UIState* uistate);
-        // virtual void onTick(UIState* uistate) = 0;
+        virtual void onTick(UIState* uistate) = 0;
         void tick_post(UIState* uistate);
 
         void draw_frame();
         int clear();
+
+        void setDefaultStyle();
 
     protected:
         float getContentScale() const;

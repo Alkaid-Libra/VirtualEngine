@@ -21,8 +21,19 @@ namespace VE
         std::string getLeafUINodeParentLabel();
         void drawSelectedEntityAxis();
 
+        void showEditorUI();
+        void showEditorMenu(bool* p_open);
+        void showEditorWorldObjectsWindow(bool* p_open);
+        void showEditorFileContentWindow(bool* p_open);
+        void showEditorGameWindow(bool* p_open);
+        void showEditorDetailWindow(bool* p_open);
+
+        void processEditorCommand();
+
     public:
         EditorUI(VirtualEditor* editor);
+
+        void onTick(UIState* uistate) override;
 
 
     private:
