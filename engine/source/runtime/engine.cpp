@@ -15,6 +15,8 @@
 
 namespace VE
 {
+    bool g_is_editor_mode{true};
+
     const FrameBuffer* getFrameBuffer(ThreeFrameBuffers* t, const VirtualRenderer*)
     {
         return t->consumingBufferShift();
@@ -31,7 +33,7 @@ namespace VE
 
     void VirtualEngine::startEngine(const EngineInitParams& param)
     {
-        // Reflection::TypeMetaRegister::Register();
+        Reflection::TypeMetaRegister::Register();
 
         ConfigManager::getInstance().initialize(param);
         AssetManager::getInstance().initialize();

@@ -38,7 +38,7 @@ namespace VE
 #define REGISTER_ARRAY_TO_MAP(name, value) TypeMetaRegisterinterface::registerToArrayMap(name, value); //Maybe location is error
 #define UNREGISTER_ALL(name, value) TypeMetaRegisterinterface::unregisterAll(name, value); //Maybe location is error
 
-#define VIRTUAL_REFLECTION_NEW(name, ...) Reflection::ReflectionPtr(#name, new name(__VA_ARGS__))
+#define VIRTUAL_REFLECTION_NEW(name, ...) Reflection::ReflectionPtr(#name, new name(__VA_ARGS__));
 #define VIRTUAL_REFLECTION_DELETE(value) \
     if (value) \
     { \

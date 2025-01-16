@@ -2,9 +2,18 @@
 
 #include "editor/include/editor.h"
 
+#include "runtime/core/base/macro.h"
+
 #include "runtime/platform/path/path.h"
 
 #include "runtime/resource/config_manager/config_manager.h"
+
+#include "runtime/function/framework/component/transform/transform_component.h"
+
+#include "runtime/function/framework/level/level.h"
+#include "runtime/function/framework/world/world_manager.h"
+
+#include "runtime/function/scene/scene_manager.h"
 
 
 #include <imgui.h>
@@ -369,6 +378,48 @@ namespace VE
         return parent_label;
     }
 
+    void EditorUI::drawSelectedEntityAxis()
+    {
+        GObject* selected_object = getSelectedGObject();
+        if (m_is_editor_mode && selected_object != nullptr)
+        {
+            const TransformComponent* transform_component = selected_object->tryGetComponentConst(TransformComponent);
+            std::vector<RenderMesh> axis_meshes;
+
+            Vector3 scale;
+            Quaternion rotation;
+            Vector3 translation;
+            transform_component->getMatrix().decomposition(translation, scale, rotation);
+            Matrix4x4 translation_matrix = Matrix4x4::getTrans(translation);
+            Matrix4x4 scale_matrix = Matrix4x4::buildScaleMatrix(1.0f, 1.0f, 1.0f);
+            Matrix4x4 axis_model_matrix = translation_matrix * scale_matrix;
+            if (m_axis_mode == EditorAxisMode::TranslateMode)
+            {
+                m_translation_axis.m_model_matrix = axis_model_matrix;
+                axis_meshes.push_back(m_translation_axis);
+                SceneManager::getInstance().setAxisMesh(axis_meshes);
+            }   
+            else if (m_axis_mode == EditorAxisMode::RotateMode)
+            {
+                m_rotation_axis.m_model_matrix = axis_model_matrix;
+                axis_meshes.push_back(m_rotation_axis);
+                SceneManager::getInstance().setAxisMesh(axis_meshes);
+            }
+            else if (m_axis_mode == EditorAxisMode::ScaleMode)
+            {
+                axis_model_matrix = axis_model_matrix * Matrix4x4(rotation);
+                m_scale_axis.m_model_matrix = axis_model_matrix;
+                axis_meshes.push_back(m_scale_axis);
+                SceneManager::getInstance().setAxisMesh(axis_meshes);
+            }
+        }
+        else
+        {
+            std::vector<RenderMesh> axis_meshes;
+            SceneManager::getInstance().setAxisMesh(axis_meshes);
+        }
+    }
+
     void EditorUI::onTick(UIState* uistate)
     {
         showEditorUI();
@@ -397,7 +448,50 @@ namespace VE
         // Quaternion camera_rotate = m_tmp_uistate->m_editor_camera->rotation().inverse();
     }
 
-    void EditorUI::showEditorMenu(bool* p_open)
+    GObject *EditorUI::getSelectedGObject() const
+    {
+        GObject* selected_object = nullptr;
+        if (m_selected_gobject_id != VIRTUAL_INVALID_GOBJECT_ID)
+        {
+            Level* level = WorldManager::getInstance().getCurrentActiveLevel();
+            if (level != nullptr)
+            {
+                selected_object = level->getGObjectByID(m_selected_gobject_id);
+            }
+        }
+
+        return selected_object;
+    }
+
+    void EditorUI::onGObjectSelected(size_t selected_gobject_id)
+    {
+        if (selected_gobject_id == m_selected_gobject_id)
+            return;
+
+        m_selected_gobject_id = selected_gobject_id;
+
+        GObject* selected_gobject = getSelectedGObject();
+        if (selected_gobject)
+        {
+            const TransformComponent* transform_component = selected_gobject->tryGetComponentConst(TransformComponent);
+            m_selected_object_matrix = transform_component->getMatrix();
+        }
+
+        drawSelectedEntityAxis();
+
+        if (m_selected_gobject_id != VIRTUAL_INVALID_GOBJECT_ID)
+        {
+            LOG_INFO("select game object " + std::to_string(m_selected_gobject_id));
+        }
+        else
+        {
+            LOG_INFO("no game object selected");
+        }
+    }
+
+
+
+    void EditorUI::showEditorMenu(bool *p_open)
     {
         ImGuiDockNodeFlags dock_flags   = ImGuiDockNodeFlags_DockSpace;
         ImGuiWindowFlags   window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoTitleBar |
@@ -448,12 +542,12 @@ namespace VE
             {
                 if (ImGui::MenuItem("Reload Current Level"))
                 {
-                    // WorldManager::getInstance().reloadCurrentLevel();
-                    // onGObjectSelected(PILOT_INVALID_GOBJECT_ID);
+                    WorldManager::getInstance().reloadCurrentLevel();
+                    onGObjectSelected(VIRTUAL_INVALID_GOBJECT_ID);
                 }
                 if (ImGui::MenuItem("Save Current Level"))
                 {
-                    // WorldManager::getInstance().saveCurrentLevel();
+                    WorldManager::getInstance().saveCurrentLevel();
                 }
                 if (ImGui::MenuItem("Exit"))
                 {
@@ -699,6 +793,10 @@ namespace VE
         // }
         ImGui::End();
     }
+
+
+
+
 
 
 } // namespace VE

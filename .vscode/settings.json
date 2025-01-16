@@ -136,6 +136,8 @@
         "polytope": "cpp",
         "buffered_value": "cpp",
         "fast_back_stack": "cpp",
-        "notify": "cpp"
+        "notify": "cpp",
+        "transform": "cpp",
+        "queue": "cpp"
     }
 }
