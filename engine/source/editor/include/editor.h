@@ -11,7 +11,8 @@ namespace VE
     class VirtualEditor : public PublicSingleton<VirtualEditor>
     {
         friend class PublicSingleton<VirtualEditor>;
-
+        friend class EditorUI;
+        
     public:
         virtual ~VirtualEditor();
 

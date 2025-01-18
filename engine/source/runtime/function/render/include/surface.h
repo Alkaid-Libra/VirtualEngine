@@ -75,6 +75,8 @@ namespace VE
 
         virtual int onInit() { return 0; }
 
+        void updateWindow(float pos_x, float pos_y, float width, float height) const;
+
     private:
         std::shared_ptr<SurfaceUI> m_ui;
         std::shared_ptr<SurfaceIO> m_io;

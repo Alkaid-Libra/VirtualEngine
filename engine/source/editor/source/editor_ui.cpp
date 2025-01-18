@@ -420,7 +420,36 @@ namespace VE
         }
     }
 
-    void EditorUI::onTick(UIState* uistate)
+    void EditorUI::drawAxisToggleButton(const char *string_id, bool check_state, EditorAxisMode axis_mode)
+    {
+        if (check_state)
+        {
+            // Button is selected
+            ImGui::PushID(string_id);
+            ImVec4 check_button_color = ImVec4(93.0f / 255.0f, 10.0f / 255.0f, 66.0f / 255.0f, 1.00f);
+            ImGui::PushStyleColor(ImGuiCol_Button,
+                                  ImVec4(check_button_color.x, check_button_color.y, check_button_color.z, 0.40f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, check_button_color);
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, check_button_color);
+
+            ImGui::Button(string_id);
+
+            ImGui::PopStyleColor(3);
+            ImGui::PopID();
+        }
+        else
+        {
+            //  button is NOT selected
+            if (ImGui::Button(string_id))
+            {
+                check_state = true;
+                m_axis_mode = axis_mode;
+                drawSelectedEntityAxis();
+            }
+        }
+    }
+
+    void EditorUI::onTick(UIState *uistate)
     {
         showEditorUI();
         processEditorCommand();
@@ -572,32 +601,32 @@ namespace VE
             return;
         }
 
-        // const Level* current_active_level = WorldManager::getInstance().getCurrentActiveLevel();
-        // if (current_active_level == nullptr)
-        //     return;
+        const Level* current_active_level = WorldManager::getInstance().getCurrentActiveLevel();
+        if (current_active_level == nullptr)
+            return;
 
-        // const auto& all_gobjects = current_active_level->getAllGObjects();
-        // for (auto& id_object_pair : all_gobjects)
-        // {
-        //     const size_t      object_id = id_object_pair.first;
-        //     GObject*          object    = id_object_pair.second;
-        //     const std::string name      = object->getName();
-        //     if (name.size() > 0)
-        //     {
-        //         if (ImGui::Selectable(name.c_str(), m_selected_gobject_id == object_id))
-        //         {
-        //             if (m_selected_gobject_id != object_id)
-        //             {
-        //                 onGObjectSelected(object_id);
-        //             }
-        //             else
-        //             {
-        //                 onGObjectSelected(PILOT_INVALID_GOBJECT_ID);
-        //             }
-        //             break;
-        //         }
-        //     }
-        // }
+        const auto& all_gobjects = current_active_level->getAllGObjects();
+        for (auto& id_object_pair : all_gobjects)
+        {
+            const size_t      object_id = id_object_pair.first;
+            GObject*          object    = id_object_pair.second;
+            const std::string name      = object->getName();
+            if (name.size() > 0)
+            {
+                if (ImGui::Selectable(name.c_str(), m_selected_gobject_id == object_id))
+                {
+                    if (m_selected_gobject_id != object_id)
+                    {
+                        onGObjectSelected(object_id);
+                    }
+                    else
+                    {
+                        onGObjectSelected(VIRTUAL_INVALID_GOBJECT_ID);
+                    }
+                    break;
+                }
+            }
+        }
         ImGui::End();
     }
     void EditorUI::showEditorGameWindow(bool* p_open)
@@ -607,109 +636,109 @@ namespace VE
 
         const ImGuiViewport* main_viewport = ImGui::GetMainViewport();
 
-        if (!ImGui::Begin("Game Engine", p_open, window_flags))
+        if (!ImGui::Begin("Game World", p_open, window_flags))
         {
             ImGui::End();
             return;
         }
 
-        static bool trans_button_ckecked  = false;
-        static bool rotate_button_ckecked = false;
-        static bool scale_button_ckecked  = false;
+        static bool trans_button_checked  = false;
+        static bool rotate_button_checked = false;
+        static bool scale_button_checked  = false;
 
-        // switch (m_axis_mode)
-        // {
-        //     case EditorAxisMode::TranslateMode:
-        //         trans_button_ckecked  = true;
-        //         rotate_button_ckecked = false;
-        //         scale_button_ckecked  = false;
-        //         break;
-        //     case EditorAxisMode::RotateMode:
-        //         trans_button_ckecked  = false;
-        //         rotate_button_ckecked = true;
-        //         scale_button_ckecked  = false;
-        //         break;
-        //     case EditorAxisMode::ScaleMode:
-        //         trans_button_ckecked  = false;
-        //         rotate_button_ckecked = false;
-        //         scale_button_ckecked  = true;
-        //         break;
-        //     default:
-        //         break;
-        // }
+        switch (m_axis_mode)
+        {
+            case EditorAxisMode::TranslateMode:
+                trans_button_checked  = true;
+                rotate_button_checked = false;
+                scale_button_checked  = false;
+                break;
+            case EditorAxisMode::RotateMode:
+                trans_button_checked  = false;
+                rotate_button_checked = true;
+                scale_button_checked  = false;
+                break;
+            case EditorAxisMode::ScaleMode:
+                trans_button_checked  = false;
+                rotate_button_checked = false;
+                scale_button_checked  = true;
+                break;
+            default:
+                break;
+        }
 
         if (ImGui::BeginMenuBar())
         {
-            // ImGui::Indent(10.f);
-            // drawAxisToggleButton("Trans", trans_button_ckecked, EditorAxisMode::TranslateMode);
-            // ImGui::Unindent();
+            ImGui::Indent(10.f);
+            drawAxisToggleButton("Trans", trans_button_checked, EditorAxisMode::TranslateMode);
+            ImGui::Unindent();
 
-            // ImGui::SameLine();
+            ImGui::SameLine();
 
-            // drawAxisToggleButton("Rotate", rotate_button_ckecked, EditorAxisMode::RotateMode);
+            drawAxisToggleButton("Rotate", rotate_button_checked, EditorAxisMode::RotateMode);
 
-            // ImGui::SameLine();
+            ImGui::SameLine();
 
-            // drawAxisToggleButton("Scale", scale_button_ckecked, EditorAxisMode::ScaleMode);
+            drawAxisToggleButton("Scale", scale_button_checked, EditorAxisMode::ScaleMode);
 
-            // ImGui::SameLine();
+            ImGui::SameLine();
 
-            // float indent_val = 0.0f;
-            // indent_val       = m_engine_window_size.x - 100.0f * getIndentScale();
+            float indent_val = 0.0f;
+            indent_val = m_engine_window_size.x - 100.0f * getIndentScale();
 
-            // ImGui::Indent(indent_val);
-            // if (m_is_editor_mode)
-            // {
-            //     ImGui::PushID("Editor Mode");
-            //     ImGui::Button("Editor Mode");
-            //     if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
-            //     {
-            //         m_is_editor_mode = !m_is_editor_mode;
-            //         drawSelectedEntityAxis();
-            //         g_is_editor_mode = false;
-            //         m_io->setFocusMode(true);
-            //     }
-            //     ImGui::PopID();
-            // }
-            // else
-            // {
-            //     ImGui::Button("Game Mode");
-            //     if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
-            //     {
-            //         m_is_editor_mode = !m_is_editor_mode;
-            //         g_is_editor_mode = true;
-            //         SceneManager::getInstance().setMainViewMatrix(m_tmp_uistate->m_editor_camera->getViewMatrix());
-            //     }
-            // }
-            // m_io->setEditorMode(m_is_editor_mode);
-            // ImGui::Unindent();
+            ImGui::Indent(indent_val);
+            if (m_is_editor_mode)
+            {
+                ImGui::PushID("Editor Mode");
+                ImGui::Button("Editor Mode");
+                if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
+                {
+                    m_is_editor_mode = !m_is_editor_mode;
+                    drawSelectedEntityAxis();
+                    g_is_editor_mode = false;
+                    m_io->setFocusMode(true);
+                }
+                ImGui::PopID();
+            }
+            else
+            {
+                ImGui::Button("Game Mode");
+                if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
+                {
+                    m_is_editor_mode = !m_is_editor_mode;
+                    g_is_editor_mode = true;
+                    SceneManager::getInstance().setMainViewMatrix(m_tmp_uistate->m_editor_camera->getViewMatrix());
+                }
+            }
+            m_io->setEditorMode(m_is_editor_mode);
+            ImGui::Unindent();
             ImGui::EndMenuBar();
         }
 
-//         if (!m_is_editor_mode)
-//         {
-//             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Press Left Alt key to display the mouse cursor!");
-//         }
+        if (!m_is_editor_mode)
+        {
+            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Press Left Alt key to display the mouse cursor!");
+        }
 
-//         auto menu_bar_rect = ImGui::GetCurrentWindow()->MenuBarRect();
+        auto menu_bar_rect = ImGui::GetCurrentWindow()->MenuBarRect();
 
-//         Vector2 new_window_pos  = {0.0f, 0.0f};
-//         Vector2 new_window_size = {0.0f, 0.0f};
-//         new_window_pos.x        = ImGui::GetWindowPos().x;
-//         new_window_pos.y        = ImGui::GetWindowPos().y + menu_bar_rect.Min.y;
-//         new_window_size.x       = ImGui::GetWindowSize().x;
-//         new_window_size.y       = ImGui::GetWindowSize().y - menu_bar_rect.Min.y;
+        Vector2 new_window_pos  = {0.0f, 0.0f};
+        Vector2 new_window_size = {0.0f, 0.0f};
+        new_window_pos.x        = ImGui::GetWindowPos().x;
+        new_window_pos.y        = ImGui::GetWindowPos().y + menu_bar_rect.Min.y;
+        new_window_size.x       = ImGui::GetWindowSize().x;
+        new_window_size.y       = ImGui::GetWindowSize().y - menu_bar_rect.Min.y;
 
-//         // if (new_window_pos != m_engine_window_pos || new_window_size != m_engine_window_size)
-//         {
-// #if defined(__GNUC__)
-//             m_editor->onWindowChanged(new_window_pos.x, new_window_pos.y, new_window_size.x, new_window_size.y);
-// #endif
+        // if (new_window_pos != m_engine_window_pos || new_window_size != m_engine_window_size)
+        {
+#if defined(__GNUC__)
+            m_editor->onWindowChanged(new_window_pos.x, new_window_pos.y, new_window_size.x, new_window_size.y);
+#endif
 
-//             m_engine_window_pos  = new_window_pos;
-//             m_engine_window_size = new_window_size;
-//             SceneManager::getInstance().setWindowSize(m_engine_window_size);
-//         }
+            m_engine_window_pos  = new_window_pos;
+            m_engine_window_size = new_window_size;
+            SceneManager::getInstance().setWindowSize(m_engine_window_size);
+        }
 
         ImGui::End();
     }

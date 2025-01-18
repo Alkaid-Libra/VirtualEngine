@@ -108,6 +108,10 @@ namespace VE
         three_buffers._struct._A->m_scene = current_scene;
         three_buffers._struct._B->m_scene = current_scene;
         three_buffers._struct._C->m_scene = current_scene;
+
+        three_buffers._struct._A->m_uistate->m_editor_camera = current_scene->m_camera;
+        three_buffers._struct._B->m_uistate->m_editor_camera = current_scene->m_camera;
+        three_buffers._struct._C->m_uistate->m_editor_camera = current_scene->m_camera;
     }
     void ThreeFrameBuffers::clear()
     {

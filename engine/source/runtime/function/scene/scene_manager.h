@@ -37,6 +37,11 @@ namespace VE
         void addSceneObject(const GameObjectDesc& go_desc);
         void syncSceneObjects();
 
+        void setMainViewMatrix(const Matrix4x4& view_matrix, VCurrentCameraType type = VCurrentCameraType::Editor);
+        void setWindowSize(const Vector2& size) { m_window_size = size; }
+
+        const Vector2& getWindowSize() const { return m_window_size; }
+
         // for EditorUI
         void setAxisMesh(std::vector<RenderMesh>& axis_meshes);
 
@@ -83,6 +88,7 @@ namespace VE
 
         std::unordered_map<ComponentId, GameObjectTransformDesc> m_component_transform_map;
 
+        Vector2 m_window_size;
 
     private:
         MeshHandle getOrCreateMeshHandle(const std::string& mesh_file);
@@ -98,5 +104,7 @@ namespace VE
         void releaseSkeletonBindingHandles();
 
         void releaseImageHandle(TextureHandle& image_handle);
+
+        void setSceneOnce();
     };
 } // namespace VE

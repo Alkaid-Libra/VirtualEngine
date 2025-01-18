@@ -30,6 +30,7 @@ namespace VE
 
         const size_t createObject(const ObjectInstanceRes& object_instance_res);
 
+        const std::unordered_map<size_t, GObject*>& getAllGObjects() const { return m_gobjects; }
         GObject* getGObjectByID(size_t go_id) const;
     };
 } // namespace VE

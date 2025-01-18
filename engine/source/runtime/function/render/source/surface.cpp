@@ -22,4 +22,18 @@ namespace VE
         else
             return false;
     }
+
+    void Surface::updateWindow(float pos_x, float pos_y, float width, float height) const
+    {
+        VkViewport viewport;
+        viewport.x = pos_x;
+        viewport.y = pos_y;
+        viewport.width = width;
+        viewport.height = height;
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+
+        m_ui->m_tmp_uistate->m_editor_camera->setAspect(width / height);
+        m_rhi->m_vulkan_manager->updateUIRenderSceneViewport(viewport);
+    }
 } // namespace VE

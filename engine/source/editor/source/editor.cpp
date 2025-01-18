@@ -30,4 +30,13 @@ namespace VE
 
         m_engine_runtime->run();
     }
+
+    void VirtualEditor::onWindowChanged(float pos_x, float pos_y, float width, float height) const
+    {
+        std::shared_ptr<VirtualRenderer> render = m_engine_runtime->getRender();
+        assert(render);
+
+        render->updateWindow(pos_x, pos_y, width, height);
+    }
+
 } // namespace VE

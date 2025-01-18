@@ -61,7 +61,6 @@ namespace VE
         // vulkan cotext include device create, default command buffer, etc
         VVulkanContext m_vulkan_context;
 
-
     private:
         // global rendering resource, include IBL data, global storage buffer
         VGlobalRenderResource m_global_render_resource;
@@ -74,7 +73,8 @@ namespace VE
 
 
     public:
-        
+        // for editor use
+        void updateUIRenderSceneViewport(VkViewport render_scene_viewport);
 
         VkCommandBuffer getCurrentCommandBuffer();
         VkRenderPass getLightingPass();

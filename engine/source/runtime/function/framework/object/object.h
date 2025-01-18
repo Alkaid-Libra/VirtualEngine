@@ -29,6 +29,7 @@ namespace VE
         void save(ObjectInstanceRes& out_object_instance_res);
 
         void setName(std::string name) { m_name = name; }
+        const std::string& getName() const { return m_name; }
 
         bool loadComponents(const std::vector<std::string>& components, TypeNameSet& out_instance_component_type_set);
     

@@ -3,6 +3,7 @@
 #include "runtime/core/math/math_headers.h"
 
 #include "render_mesh.h"
+#include "render_camera.h"
 #include "material.h"
 
 #include <memory>
@@ -132,7 +133,7 @@ namespace VE
         Vector3 m_center{0, 0, 0};
         float m_diagonal{0};
 
-        // std::shared_ptr<PCamera> m_camera;
+        std::shared_ptr<VCamera> m_camera;
         
 
 
@@ -180,7 +181,7 @@ namespace VE
             bool gpuMemory;
         } m_overlays{true, true, true, true};
 
-        // std::shared_ptr<VCamera> m_editor_camera;
+        std::shared_ptr<VCamera> m_editor_camera;
         
     };
 

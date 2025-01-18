@@ -25,6 +25,8 @@ namespace VE
         
         void drawSelectedEntityAxis();
 
+        void drawAxisToggleButton(const char* string_id, bool check_state, EditorAxisMode axis_mode);
+
         void showEditorUI();
         void showEditorMenu(bool* p_open);
         void showEditorWorldObjectsWindow(bool* p_open);
@@ -48,6 +50,11 @@ namespace VE
 
         std::unordered_map<std::string, std::function<void(std::string, void*)>> m_editor_ui_creator;
         std::unordered_map<std::string, unsigned int> m_new_object_index_map;
+
+        Vector2 m_engine_window_pos{0.0f, 0.0f};
+        Vector2 m_engine_window_size{1280.0f, 768.0f};
+        float m_mouse_x{0.0f};
+        float m_mouse_y{0.0f};
 
         bool m_is_editor_mode{true};
 

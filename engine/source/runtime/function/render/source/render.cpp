@@ -17,4 +17,10 @@ namespace VE
         
         return tick_result;
     }
+
+    void VirtualRenderer::updateWindow(float pos_x, float pos_y, float width, float height) const
+    {
+        m_surface->updateWindow(pos_x, pos_y, width, height);
+    }
+
 } // namespace VE

@@ -28,7 +28,10 @@ namespace VE
         uint32_t getHeight() const { return m_height; }
         const char* getTitle() const { return m_title; }
 
-
+        bool m_is_editor_mode{true};
+        bool m_is_focus_mode{false};
+        void setEditorMode(bool mode) { m_is_editor_mode = mode; }
+        void setFocusMode(bool mode) { m_is_focus_mode = mode; }
 
         GLFWwindow* m_window{nullptr};
 

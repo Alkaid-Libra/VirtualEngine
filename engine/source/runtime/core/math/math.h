@@ -255,7 +255,7 @@ namespace VE
         makeViewMatrix(const Vector3& position, const Quaternion& orientation, const Matrix4x4* reflect_matrix = nullptr);
         
         static Matrix4x4
-        makeLookMatrix(const Vector3& eye_position, const Vector3& target_position, const Vector3& up_dir);
+        makeLookAtMatrix(const Vector3& eye_position, const Vector3& target_position, const Vector3& up_dir);
         
         static Matrix4x4 makePerspectiveMatrix(Radian fovy, float aspect, float znear, float zfar);
 

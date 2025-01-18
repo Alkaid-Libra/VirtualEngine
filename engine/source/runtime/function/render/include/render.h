@@ -31,7 +31,7 @@ namespace VE
             return true;
         }
 
-
+        void updateWindow(float pos_x, float pos_y, float width, float height) const;
 
 
         VRegister<const FrameBuffer*, const VirtualRenderer*>::GetPtr f_get_framebuffer;

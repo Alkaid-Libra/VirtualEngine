@@ -15,7 +15,6 @@
 #include "tiny_obj_loader.h"
 
 #include <filesystem>
-#include "scene_manager.h"
 
 namespace VE
 {
@@ -236,7 +235,24 @@ namespace VE
     }
 
 
-    void SceneManager::initialize() {}
+    void SceneManager::initialize() { setSceneOnce(); }
+
+    void VE::SceneManager::setSceneOnce()
+    {
+        if (m_scene && m_scene->m_loaded == false)
+        {
+
+            m_scene->m_camera = std::make_shared<VCamera>();
+            m_scene->m_camera->lookAt({-5.0f, 0.0f, 3.0f}, {-4.0f, 0.0f, 3.0f}, Vector3(0.0f, 0.0f, 1.0f));
+            m_scene->m_camera->m_zfar = 1000.0f;
+            m_scene->m_camera->m_znear = 0.1f;
+            m_scene->m_camera->setAspect(1280.0f / 768.0f);
+        
+
+            m_scene->m_loaded = true;
+        }
+    }
+
 
     int SceneManager::tick(FrameBuffer* buffer)
     {
@@ -358,6 +374,14 @@ namespace VE
         
         m_pick_object_mutex.unlock();
         m_scene->unlock();
+    }
+
+    void SceneManager::setMainViewMatrix(const Matrix4x4& view_matrix, VCurrentCameraType type)
+    {
+        if (m_scene && m_scene->m_camera)
+        {
+            m_scene->m_camera->setMainViewMatrix(view_matrix, type);
+        }
     }
 
     void SceneManager::setAxisMesh(std::vector<RenderMesh> &axis_meshes)
