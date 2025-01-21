@@ -1,6 +1,8 @@
 #pragma once
 
 #include "editor/include/axis.h"
+#include "editor/include/editor_file_service.h"
+
 #include "runtime/function/render/include/surface.h"
 
 #include "runtime/function/framework/object/object.h"
@@ -33,6 +35,9 @@ namespace VE
         void showEditorFileContentWindow(bool* p_open);
         void showEditorGameWindow(bool* p_open);
         void showEditorDetailWindow(bool* p_open);
+
+        void buildEditorFileAssetsUITree(EditorFileNode* node);
+        void onFileContentItemClicked(EditorFileNode* node);
 
         void processEditorCommand();
 
@@ -69,6 +74,8 @@ namespace VE
         EditorRotationAxis m_rotation_axis;
         EditorScaleAxis m_scale_axis;
 
+        EditorFileService m_editor_file_service;
+        std::chrono::time_point<std::chrono::steady_clock> m_last_file_tree_update;
     };
 
 

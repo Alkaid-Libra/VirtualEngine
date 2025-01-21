@@ -9,7 +9,7 @@ namespace VE
         return file_path.lexically_relative(directory);
     }
 
-    const vector<string> Path::getPathSements(const filesystem::path& file_path)
+    const vector<string> Path::getPathSegments(const filesystem::path& file_path)
     {
         vector<string> segments;
         for (auto iter = file_path.begin(); iter != file_path.end(); ++iter)

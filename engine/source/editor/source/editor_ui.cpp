@@ -7,6 +7,7 @@
 #include "runtime/platform/path/path.h"
 
 #include "runtime/resource/config_manager/config_manager.h"
+#include "runtime/resource/asset_manager/asset_manager.h"
 
 #include "runtime/function/framework/component/transform/transform_component.h"
 
@@ -764,20 +765,18 @@ namespace VE
             ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed);
             ImGui::TableHeadersRow();
 
-            // auto current_time = std::chrono::steady_clock::now();
-            // if (current_time - m_last_file_tree_update > std::chrono::seconds(1))
-            // {
-            //     m_editor_file_service.buildEngineFileTree();
-            //     m_last_file_tree_update = current_time;
-            // }
-            // m_last_file_tree_update = current_time;
+            auto current_time = std::chrono::steady_clock::now();
+            if (current_time - m_last_file_tree_update > std::chrono::seconds(1))
+            {
+                m_editor_file_service.buildEngineFileTree();
+                // m_last_file_tree_update = current_time;
+            }
+            m_last_file_tree_update = current_time;
 
-            // EditorFileNode* editor_root_node = m_editor_file_service.getEditorRootNode();
-            // buildEditorFileAssstsUITree(editor_root_node);
+            EditorFileNode* editor_root_node = m_editor_file_service.getEditorRootNode();
+            buildEditorFileAssetsUITree(editor_root_node);
             ImGui::EndTable();
         }
-
-        // file image list
 
         ImGui::End();
     }
@@ -823,9 +822,65 @@ namespace VE
         ImGui::End();
     }
 
+    void EditorUI::buildEditorFileAssetsUITree(EditorFileNode *node)
+    {
+        ImGui::TableNextRow();
+        ImGui::TableNextColumn();
 
+        const bool is_folder = node->m_child_nodes.size() > 0;
+        if (is_folder)
+        {
+            bool open = ImGui::TreeNodeEx(node->m_file_name.c_str(), ImGuiTreeNodeFlags_SpanFullWidth);
+            ImGui::TableNextColumn();
+            ImGui::SetNextItemWidth(100.0f);
+            ImGui::TextUnformatted(node->m_file_type.c_str());
+            if (open)
+            {
+                for (int child_n = 0; child_n < node->m_child_nodes.size(); child_n++)
+                {
+                    buildEditorFileAssetsUITree(node->m_child_nodes[child_n].get());
+                }
+                ImGui::TreePop();
+            }
+        }
+        else
+        {
+            ImGui::TreeNodeEx(node->m_file_name.c_str(),
+                              ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen |
+                              ImGuiTreeNodeFlags_SpanFullWidth);
+            if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+            {
+                onFileContentItemClicked(node);
+            }
+            ImGui::TableNextColumn();
+            ImGui::SetNextItemWidth(100.0f);
+            ImGui::TextUnformatted(node->m_file_type.c_str());
+        }
 
+    }
 
+    void EditorUI::onFileContentItemClicked(EditorFileNode *node)
+    {
+        if (node->m_file_type != "object")
+            return;
 
+        Level* level = WorldManager::getInstance().getCurrentActiveLevel();
+        if (level == nullptr)
+            return;
 
+        const unsigned int new_object_index = ++m_new_object_index_map[node->m_file_name];
+        
+        ObjectInstanceRes new_object_instance_res;
+        new_object_instance_res.m_name =
+            "New_" + Path::getInstance().getFilePureName(node->m_file_name) + "_" + std::to_string(new_object_index);
+        new_object_instance_res.m_definition =
+            AssetManager::getInstance().getFullPath(node->m_file_path).generic_string();
+
+        size_t new_gobject_id = level->createObject(new_object_instance_res);
+        if (new_gobject_id != VIRTUAL_INVALID_GOBJECT_ID)
+        {
+            onGObjectSelected(new_gobject_id);
+        }
+    
+    }
 } // namespace VE
